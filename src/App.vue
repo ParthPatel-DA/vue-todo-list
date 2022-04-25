@@ -1,5 +1,8 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <h1>Todo App</h1>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>

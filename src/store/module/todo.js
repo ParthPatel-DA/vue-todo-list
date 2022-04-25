@@ -1,10 +1,9 @@
-import { FETCH_TODO } from "../types/action";
-import { FETCH_START, FETCH_END, ADD, EDIT, DELETE } from "../types/mutation";
+
 
 const state = {
   todoList: [],
   isLoading: true,
-  currentIndex: 2,
+  currentIndex: 3,
 };
 
 const getters = {
@@ -20,35 +19,41 @@ const getters = {
 };
 
 const actions = {
-  [FETCH_TODO]({ commit }) {
-    commit(FETCH_START);
+  fetchTodo({ commit }) {
+    commit('FETCH_START');
     setTimeout(() => {
       const data = [
         { text: "Task 1", id: 1, isCompleted: true },
         { text: "Task 2", id: 2, isCompleted: false },
       ];
-      commit(FETCH_END, { data });
+      commit('FETCH_END', { data });
     }, 1000);
   },
 };
 
 const mutations = {
-  [FETCH_START](state) {
+  FETCH_START(state) {
     state.isLoading = true;
   },
-  [FETCH_END](state, { data }) {
+  FETCH_END(state, { data }) {
     state.todoList = data;
     state.isLoading = false;
   },
-  [ADD](state, { data }) {
+  ADD(state, { data }) {
     state.todoList.push({ text: data.text, id: state.currentIndex });
     state.currentIndex++;
   },
-  [EDIT](state, data) {
-    state.todoList[data.editIndex].text = data.text;
+  EDIT(state, data) {
+    const index = state.todoList.findIndex(item => item.id === data.editIndex);
+    state.todoList[index].text = data.text;
   },
-  [DELETE](state, data) {
-    state.todoList.splice(data.index, 1);
+  COMPLETE(state, data) {
+    const index = state.todoList.findIndex(item => item.id === data.data.id);
+    state.todoList[index].isCompleted = !state.todoList[index].isCompleted;
+  },
+  DELETE(state, data) {
+    const index = state.todoList.findIndex(item => item.id === data.data.id);
+    state.todoList.splice(index, 1);
   },
 };
 

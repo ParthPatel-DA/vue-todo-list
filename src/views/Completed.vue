@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <tbody>
     <tr
       is="task-card"
       v-for="(task, index) in isCompleted"
@@ -7,9 +7,11 @@
       :task="task"
       :index="index"
       @edit="editTask"
-      @delete="deleteTask"
     />
-  </span>
+    <tr v-if="isCompleted.length === 0">
+      <td colspan="3">No Task</td>
+    </tr>
+  </tbody>
 </template>
 
 <script>
@@ -22,7 +24,6 @@ export default {
     TaskCard,
   },
   props: {
-    deleteTask: Function,
     editTask: Function,
   },
   computed: {
@@ -32,9 +33,4 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 </style>

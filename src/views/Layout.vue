@@ -26,11 +26,7 @@
         <tr v-if="isLoading === true">
           <td colspan="3">Loading...</td>
         </tr>
-        <router-view
-          v-else
-          :editTask="editTask"
-          :deleteTask="deleteTask"
-        ></router-view>
+        <router-view v-else :editTask="editTask"></router-view>
       </table>
     </div>
   </div>
@@ -38,8 +34,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { FETCH_TODO } from "../store/types/action";
-import { ADD, DELETE, EDIT } from "../store/types/mutation";
 
 export default {
   name: "app-layout",
@@ -53,7 +47,7 @@ export default {
   },
   mounted() {
     // console.log(this.$store);
-    this.$store.dispatch(FETCH_TODO);
+    this.$store.dispatch("fetchTodo");
   },
   computed: {
     ...mapGetters(["todoList", "isLoading"]),
@@ -65,13 +59,13 @@ export default {
       } else {
         if (this.editIndex !== -1) {
           // this.todoList[this.editIndex].text = this.todoText;
-          this.$store.commit(EDIT, {
+          this.$store.commit("EDIT", {
             text: this.todoText,
             editIndex: this.editIndex,
           });
           this.editIndex = -1;
         } else {
-          this.$store.commit(ADD, { data: { text: this.todoText } });
+          this.$store.commit("ADD", { data: { text: this.todoText } });
           // this.todoList.push({ text: this.todoText, id: this.currentIndex });
           // this.currentIndex++;
         }
@@ -80,11 +74,7 @@ export default {
     },
     editTask: function (index) {
       this.todoText = this.todoList[index].text;
-      this.editIndex = index;
-    },
-    deleteTask: function (index) {
-      // this.todoList = this.todoList.filter((_, i) => index !== i);
-      this.$store.commit(DELETE, { data: { index } });
+      this.editIndex = this.todoList[index].id;
     },
   },
 };
